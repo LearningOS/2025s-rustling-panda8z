@@ -1,6 +1,6 @@
 // fake_exercise
 
-// I AM NOT DONE
+// I_AM_NOT_DONE
 
 fn main() {
 

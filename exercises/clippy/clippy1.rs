@@ -9,7 +9,7 @@
 // Execute `rustlings hint clippy1` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
+// I_AM_NOT_DONE
 
 use std::f32;
 

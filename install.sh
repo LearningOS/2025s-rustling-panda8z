@@ -161,6 +161,8 @@ else
     Version="tags/${Version}"
 fi
 
+# Version="tags/5.5.1"
+
 echo "Checking out version $Version..."
 git checkout -q ${Version}
 

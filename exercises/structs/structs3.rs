@@ -7,7 +7,7 @@
 // Execute `rustlings hint structs3` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
+// I_AM_NOT_DONE
 
 #[derive(Debug)]
 struct Package {
@@ -29,12 +29,20 @@ impl Package {
         }
     }
 
-    fn is_international(&self) -> ??? {
-        // Something goes here...
+    fn is_international(&self) -> bool {
+        if self.sender_country == self.recipient_country {
+            false
+        } else {
+            true
+        }
     }
 
-    fn get_fees(&self, cents_per_gram: i32) -> ??? {
-        // Something goes here...
+    fn get_fees(&self, cents_per_gram: i32) -> i32 {
+        if self.is_international() {
+            self.weight_in_grams * (cents_per_gram * 2)
+        } else {
+            self.weight_in_grams * cents_per_gram
+        }
     }
 }
 
