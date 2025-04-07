@@ -3,7 +3,6 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-// I_AM_NOT_DONE
 use std::cmp::Ordering;
 use std::fmt::Debug;
 

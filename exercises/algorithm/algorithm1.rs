@@ -2,11 +2,9 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I_AM_NOT_DONE
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
-use std::vec::*;
 
 #[derive(Debug)]
 struct Node<T> {
@@ -14,7 +12,8 @@ struct Node<T> {
     next: Option<NonNull<Node<T>>>,
 }
 
-impl<T> Node<T> {
+// Added Clone trait bound to T
+impl<T: Clone> Node<T> {
     fn new(t: T) -> Node<T> {
         Node {
             val: t,
@@ -22,6 +21,7 @@ impl<T> Node<T> {
         }
     }
 }
+
 #[derive(Debug)]
 struct LinkedList<T> {
     length: u32,
@@ -29,13 +29,14 @@ struct LinkedList<T> {
     end: Option<NonNull<Node<T>>>,
 }
 
-impl<T> Default for LinkedList<T> {
+impl<T: Clone> Default for LinkedList<T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T> LinkedList<T> {
+// Added Clone trait bound to T
+impl<T: Clone> LinkedList<T> {
     pub fn new() -> Self {
         Self {
             length: 0,
@@ -69,44 +70,45 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
-	{
-		//TODO
-        // merge two linked list
-        // return self linked list
-        // list_a and list_b are ordered linked list
 
-		Self {
-            length: 0,
-            start: None,
-            end: None,
-        };
+    pub fn merge(mut list_a: LinkedList<T>, mut list_b: LinkedList<T>) -> Self
+    where
+        T: Ord,
+    {
         let mut list_c = LinkedList::<T>::new();
         let mut a = list_a.start;
         let mut b = list_b.start;
-        while a.is_some() && b.is_some() {
-            let a_val = unsafe { (*a.unwrap().as_ptr()).val };
-            let b_val = unsafe { (*b.unwrap().as_ptr()).val };
-            if a_val < b_val {
-                list_c.add(a_val);
-                a = unsafe { (*a.unwrap().as_ptr()).next };
-            } else {
-                list_c.add(b_val);
-                b = unsafe { (*b.unwrap().as_ptr()).next };
+
+        while let (Some(a_ptr), Some(b_ptr)) = (a, b) {
+            unsafe {
+                let a_val = &(*a_ptr.as_ptr()).val;
+                let b_val = &(*b_ptr.as_ptr()).val;
+                if a_val <= b_val {
+                    list_c.add((*a_ptr.as_ptr()).val.clone());
+                    a = (*a_ptr.as_ptr()).next;
+                } else {
+                    list_c.add((*b_ptr.as_ptr()).val.clone());
+                    b = (*b_ptr.as_ptr()).next;
+                }
             }
         }
-        while a.is_some() {
-            let a_val = unsafe { (*a.unwrap().as_ptr()).val };
-            list_c.add(a_val);
-            a = unsafe { (*a.unwrap().as_ptr()).next };
+
+        while let Some(a_ptr) = a {
+            unsafe {
+                list_c.add((*a_ptr.as_ptr()).val.clone());
+                a = (*a_ptr.as_ptr()).next;
+            }
         }
-        while b.is_some() {
-            let b_val = unsafe { (*b.unwrap().as_ptr()).val };
-            list_c.add(b_val);
-            b = unsafe { (*b.unwrap().as_ptr()).next };
+
+        while let Some(b_ptr) = b {
+            unsafe {
+                list_c.add((*b_ptr.as_ptr()).val.clone());
+                b = (*b_ptr.as_ptr()).next;
+            }
         }
+
         list_c
-	}
+    }
 }
 
 impl<T> Display for LinkedList<T>
